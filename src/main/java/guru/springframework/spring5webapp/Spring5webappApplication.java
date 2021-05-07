@@ -10,4 +10,5 @@ public class Spring5webappApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Spring5webappApplication.class, args);
 	}
+
 }
