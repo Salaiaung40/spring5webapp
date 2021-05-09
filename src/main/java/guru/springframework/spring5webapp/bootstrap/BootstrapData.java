@@ -1,6 +1,5 @@
 package guru.springframework.spring5webapp.bootstrap;
 
-
 import guru.springframework.spring5webapp.domain.Author;
 import guru.springframework.spring5webapp.domain.Book;
 import guru.springframework.spring5webapp.domain.Publisher;
@@ -10,14 +9,17 @@ import guru.springframework.spring5webapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * Created by jt on 12/23/19.
+ */
 @Component
-public class BootstrapData implements CommandLineRunner {
+public class BootStrapData implements CommandLineRunner {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final PublisherRepository publisherRepository;
 
-    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
+    public BootStrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
@@ -26,56 +28,33 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        System.out.println("Started in BootStrap");
+        System.out.println("Started in Bootstrap");
 
-        //Add publisher for all
-        Publisher publisher = new Publisher("Penguin", "Avenue Louis", "Brussel", "Brussels", 1000);
+        Publisher publisher = new Publisher();
+        publisher.setName("SFG Publishing");
+        publisher.setCity("St Petersburg");
+        publisher.setState("FL");
 
-        //Save should be right after input
         publisherRepository.save(publisher);
 
-        //need to build many to many fpr publisher
-        //code goes hear
+        System.out.println("Publisher Count: " + publisherRepository.count());
 
-        //First Author, Book
         Author eric = new Author("Eric", "Evans");
-        Book dddd = new Book("Domain Driven Design", "123456");
+        Book ddd = new Book("Domain Driven Design", "123123");
+        eric.getBooks().add(ddd);
+        ddd.getAuthors().add(eric);
 
-        //For many to many Publisher
-        // Publisher penguin = new Publisher("Penguin", "Avenue Louis", "Brussel", "Brussels", 1000 );
-         /*
-        dddd.getPublisher(penguin);
-        penguin.getBooks().add(dddd);
-/        penguin.getAuthors().add(eric);
-         */
-
-        eric.getBooks().add(dddd);
-        dddd.getAuthors().add(eric);
-
-        dddd.setPublisher(publisher);
-        publisher.getBooks().add(dddd);
+        ddd.setPublisher(publisher);
+        publisher.getBooks().add(ddd);
 
         authorRepository.save(eric);
-        bookRepository.save(dddd);
+        bookRepository.save(ddd);
         publisherRepository.save(publisher);
 
-        //        publisherRepositories.save(penguin);
-
-
-
-        //Second Author, Book
         Author rod = new Author("Rod", "Johnson");
-        Book noEJB = new Book("J2EE", "123457");
-//        Publisher person = new Publisher("Person", "Avenue Gourge", "Etterbeek", "Brussel", 1200);
+        Book noEJB = new Book("J2EE Development without EJB", "3939459459");
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
-
-
-        /*
-        noEJB.setPublisher(person);
-        person.getBooks().add(noEJB);
-
-         */
 
         noEJB.setPublisher(publisher);
         publisher.getBooks().add(noEJB);
@@ -84,14 +63,7 @@ public class BootstrapData implements CommandLineRunner {
         bookRepository.save(noEJB);
         publisherRepository.save(publisher);
 
-        System.out.println("Number of Author : " + authorRepository.count());
         System.out.println("Number of Books: " + bookRepository.count());
-        System.out.println("Number of Publisher: " + publisherRepository.count());
-        System.out.println("Publisher by Number of Books: " + publisher.getBooks().size());
-         /*
-        System.out.println("Publisher by Number of Books: " + penguin.getBooks().size());
-        System.out.println("Publisher by Number of Books: " + person.getBooks().size());
-         */
-
+        System.out.println("Publisher Number of Books: " + publisher.getBooks().size());
     }
 }
